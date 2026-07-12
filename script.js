@@ -2,6 +2,34 @@ const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelector(".nav-links");
 const progressBar = document.querySelector(".scroll-progress");
 const revealElements = document.querySelectorAll(".reveal");
+const themeToggle = document.querySelector(".theme-toggle");
+const THEME_STORAGE_KEY = "theme";
+
+const applyTheme = (theme) => {
+  const isLight = theme === "light";
+  document.documentElement.setAttribute("data-theme", isLight ? "light" : "dark");
+
+  if (themeToggle) {
+    themeToggle.setAttribute("aria-pressed", String(isLight));
+    themeToggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+  }
+};
+
+const initTheme = () => {
+  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  applyTheme(savedTheme === "light" ? "light" : "dark");
+};
+
+initTheme();
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
+    const nextTheme = isLight ? "dark" : "light";
+    applyTheme(nextTheme);
+    localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+  });
+}
 
 const closeMenu = () => {
   if (!navToggle || !navLinks) return;
